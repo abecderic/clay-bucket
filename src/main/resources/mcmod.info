@@ -1,14 +1,14 @@
 [
 {
-  "modid": "darkmattermagic",
-  "name": "Dark Matter Magic",
-  "description": "All kinds of cool magic-y stuff centered around Dark Matter.",
-  "version": "1.0 pre 1",
-  "mcversion": "${mcversion}",
+  "modid": "claybucket",
+  "name": "Clay Bucket",
+  "description": "",
+  "version": "1.1",
+  "mcversion": "1.7.10",
   "url": "",
   "updateUrl": "",
-  "authorList": ["abec"],
-  "credits": "To Vswe and Pahimar for their modding tutorials without whom this mod wouldn't exist! Thanks guys!",
+  "authorList": ["abecderic"],
+  "credits": "",
   "logoFile": "",
   "screenshots": [],
   "dependencies": []

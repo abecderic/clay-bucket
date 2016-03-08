@@ -96,7 +96,7 @@ public class ItemClayBucket extends Item
 				{
 					IFluidHandler tank = (IFluidHandler) te;
 					FluidStack stack = tank.drain(ForgeDirection.getOrientation(event.face), AMOUNT, false);
-					if (stack.amount == AMOUNT)
+					if (stack != null && stack.amount == AMOUNT)
 					{
 						for (int i = 0; i < ClayBucketMod.FLUIDS.length; i++)
 						{
