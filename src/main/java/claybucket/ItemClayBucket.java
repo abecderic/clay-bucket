@@ -18,8 +18,6 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
@@ -39,15 +37,15 @@ public class ItemClayBucket extends Item
     @Override
     public String getUnlocalizedName()
     {
-        return "item." + ClayBucketMod.MODID + ":" + ClayBucketMod.CLAYBUCKET;
+        return "item." + ClayBucketMod.MODID + ":" + Items.CLAYBUCKET;
     }
 
     @Override
     public String getUnlocalizedName(ItemStack stack)
     {
-        if (stack.getItemDamage() > 0 && stack.getItemDamage() <= ClayBucketMod.NAMES.length)
+        if (stack.getItemDamage() > 0 && stack.getItemDamage() <= Items.NAMES.length)
         {
-            return getUnlocalizedName() + "_" + ClayBucketMod.NAMES[stack.getItemDamage() - 1];
+            return getUnlocalizedName() + "_" + Items.NAMES[stack.getItemDamage() - 1];
         }
         else
         {
@@ -56,17 +54,18 @@ public class ItemClayBucket extends Item
     }
 
     @Override
-    public void getSubItems(Item itemIn, CreativeTabs tab, List subItems) {
-        for (int i = 0; i <= ClayBucketMod.NAMES.length; i++)
+    public void getSubItems(Item itemIn, CreativeTabs tab, List subItems)
+    {
+        for (int i = 0; i <= Items.NAMES.length; i++)
         {
-            subItems.add(new ItemStack(ClayBucketMod.claybucket, 1, i));
+            subItems.add(new ItemStack(Items.claybucket, 1, i));
         }
     }
 
     @SubscribeEvent
     public void onPlayerInteract(PlayerInteractEvent event)
     {
-        if (!event.world.isRemote && event.entityPlayer.getCurrentEquippedItem() != null && event.entityPlayer.getCurrentEquippedItem().getItem() == ClayBucketMod.claybucket)
+        if (!event.world.isRemote && event.entityPlayer.getCurrentEquippedItem() != null && event.entityPlayer.getCurrentEquippedItem().getItem() == Items.claybucket)
         {
             TileEntity te = event.world.getTileEntity(event.pos);
             if (te != null && te instanceof IFluidHandler)
@@ -77,9 +76,9 @@ public class ItemClayBucket extends Item
                     FluidStack stack = tank.drain(event.face, AMOUNT, false);
                     if (stack.amount == AMOUNT)
                     {
-                        for (int i = 0; i < ClayBucketMod.FLUIDS.length; i++)
+                        for (int i = 0; i < Items.FLUIDS.length; i++)
                         {
-                            if (stack.getFluid() == ClayBucketMod.FLUIDS[i])
+                            if (stack.getFluid() == Items.FLUIDS[i])
                             {
                                 ItemStack item = event.entityPlayer.getCurrentEquippedItem();
                                 item.setItemDamage(i + 1);
@@ -97,11 +96,11 @@ public class ItemClayBucket extends Item
                 else /* Filled */
                 {
                     IFluidHandler tank = (IFluidHandler) te;
-                    FluidStack fluid = new FluidStack(ClayBucketMod.FLUIDS[event.entityPlayer.getCurrentEquippedItem().getItemDamage() - 1], AMOUNT);
+                    FluidStack fluid = new FluidStack(Items.FLUIDS[event.entityPlayer.getCurrentEquippedItem().getItemDamage() - 1], AMOUNT);
                     if (tank.fill(event.face, fluid, false) == AMOUNT)
                     {
                         ItemStack item = event.entityPlayer.getCurrentEquippedItem();
-                        if (ClayBucketMod.DESTROY_BUCKET[item.getItemDamage() - 1])
+                        if (Items.DESTROY_BUCKET[item.getItemDamage() - 1])
                         {
                             item.stackSize = 0;
                         }
@@ -141,9 +140,9 @@ public class ItemClayBucket extends Item
                 if (stack.getItemDamage() == 0) /* Empty */
                 {
                     Block block = world.getBlockState(pos).getBlock();
-                    for (int i = 0; i < ClayBucketMod.BLOCKS.length; i++)
+                    for (int i = 0; i < Items.BLOCKS.length; i++)
                     {
-                        if (block.equals(ClayBucketMod.BLOCKS[i]))
+                        if (block.equals(Items.BLOCKS[i]))
                         {
                             stack.setItemDamage(i + 1);
                             world.setBlockToAir(pos);
@@ -153,7 +152,7 @@ public class ItemClayBucket extends Item
                 }
                 else /* Filled */
                 {
-                    Block block = ClayBucketMod.BLOCKS[stack.getItemDamage() - 1];
+                    Block block = Items.BLOCKS[stack.getItemDamage() - 1];
                     pos = pos.offset(mop.sideHit);
                     if (block.isReplaceable(world, pos))
                     {
@@ -175,7 +174,7 @@ public class ItemClayBucket extends Item
                         {
                             world.setBlockState(pos, block.getDefaultState(), 3);
 
-                            if (ClayBucketMod.DESTROY_BUCKET[stack.getItemDamage() - 1])
+                            if (Items.DESTROY_BUCKET[stack.getItemDamage() - 1])
                             {
                                 stack.stackSize = 0;
                             }

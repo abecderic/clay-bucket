@@ -17,7 +17,7 @@ public class ItemUnfiredClaybucket extends Item
     @Override
     public String getUnlocalizedName()
     {
-        return "item." + ClayBucketMod.MODID + ":" + ClayBucketMod.UNFIRED_CLAYBUCKET;
+        return "item." + ClayBucketMod.MODID + ":" + Items.UNFIRED_CLAYBUCKET;
     }
 
     @Override
