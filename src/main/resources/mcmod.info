@@ -1,0 +1,16 @@
+[
+{
+  "modid": "claybucket",
+  "name": "Clay Bucket",
+  "description": "",
+  "version": "1.0",
+  "mcversion": "1.9",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["abecderic"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
