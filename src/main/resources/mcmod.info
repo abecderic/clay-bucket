@@ -4,7 +4,11 @@
   "name": "Clay Bucket",
   "description": "",
   "version": "1.0",
+<<<<<<< HEAD
   "mcversion": "1.9",
+=======
+  "mcversion": "1.8.9",
+>>>>>>> 2b744683dd42cb36108baaa2129df77f96a86ff7
   "url": "",
   "updateUrl": "",
   "authorList": ["abecderic"],
