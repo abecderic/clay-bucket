@@ -20,10 +20,12 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidContainerItem;
 import net.minecraftforge.fluids.IFluidHandler;
 
-public class ItemClayBucket extends Item
+public class ItemClayBucket extends Item implements IFluidContainerItem
 {
 	@SideOnly(Side.CLIENT)
 	private IIcon[] icons;
@@ -147,8 +149,9 @@ public class ItemClayBucket extends Item
 	{
 		if (!world.isRemote && stack != null)
 		{
-			MovingObjectPosition mop = this.getMovingObjectPositionFromPlayer(world, player, stack.getItemDamage() == 0);
-
+			MovingObjectPosition mop = this.getMovingObjectPositionFromPlayer(world, player, true);
+			
+			System.out.println("right click: " + mop);
 			if (mop != null && mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK)
 			{
 				int x = mop.blockX, y = mop.blockY, z = mop.blockZ;
@@ -213,7 +216,7 @@ public class ItemClayBucket extends Item
 							int no = player.getRNG().nextInt(NETHER_LINES);
 							player.addChatComponentMessage(new ChatComponentText(StatCollector.translateToLocal("chat.claybucketnether." + no)));
 						}
-						else
+						else if (world.isAirBlock(x, y, z))
 						{
 							world.setBlock(x, y, z, block, 0, 3);
 
@@ -231,5 +234,53 @@ public class ItemClayBucket extends Item
 			}
 		}
 		return stack;
+	}
+
+	@Override
+	public FluidStack getFluid(ItemStack container)
+	{
+		if (container == null) return null;
+		if (container.getItemDamage() == 0) return null;
+		if (container.getItemDamage() > ClayBucketMod.FLUIDS.length + 1) return null;
+		return new FluidStack(ClayBucketMod.FLUIDS[container.getItemDamage()-1], AMOUNT);
+	}
+
+	@Override
+	public int getCapacity(ItemStack container)
+	{
+		return AMOUNT;
+	}
+
+	@Override
+	public int fill(ItemStack container, FluidStack resource, boolean doFill)
+	{
+		if (container.getItemDamage() != 0) return 0;
+		if (resource.amount != AMOUNT) return 0;
+		for (int i = 0; i < ClayBucketMod.FLUIDS.length; i++)
+		{
+			Fluid fluid = ClayBucketMod.FLUIDS[i];
+			if (resource.getFluid().equals(fluid))
+			{
+				if (doFill)
+				{
+					container.setItemDamage(i+1);
+				}
+				return AMOUNT;
+			}
+		}
+		return 0;
+	}
+
+	@Override
+	public FluidStack drain(ItemStack container, int maxDrain, boolean doDrain)
+	{
+		if (container.getItemDamage() <= 0) return null;
+		if (maxDrain < 1000) return null;
+		int dmg = container.getItemDamage();
+		if (doDrain)
+		{
+			container.setItemDamage(0);
+		}
+		return new FluidStack(ClayBucketMod.FLUIDS[dmg-1], AMOUNT);
 	}
 }
