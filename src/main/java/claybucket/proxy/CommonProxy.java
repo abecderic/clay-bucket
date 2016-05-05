@@ -17,8 +17,5 @@ public class CommonProxy
         GameRegistry.addSmelting(Items.unfiredClaybucket, new ItemStack(Items.claybucket), 0.2f);
     }
 
-    public void registerTextures()
-    {
-        /* NO-OP */
-    }
+    public void registerTextures() { /* NO-OP */  }
 }
