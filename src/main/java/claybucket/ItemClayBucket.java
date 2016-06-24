@@ -30,10 +30,11 @@ public class ItemClayBucket extends Item
 
     public ItemClayBucket()
     {
-        this.setCreativeTab(CreativeTabs.tabAllSearch);
+        this.setCreativeTab(CreativeTabs.MISC);
         this.setHasSubtypes(true);
         this.setMaxStackSize(1);
         MinecraftForge.EVENT_BUS.register(this);
+        this.setRegistryName(Items.CLAYBUCKET);
     }
 
     @Override
@@ -138,7 +139,7 @@ public class ItemClayBucket extends Item
         ItemStack stack = playerIn.getHeldItem(hand);
         if (!worldIn.isRemote && stack != null)
         {
-            RayTraceResult rtr = this.getMovingObjectPositionFromPlayer(worldIn, playerIn, stack.getItemDamage() == 0);
+            RayTraceResult rtr = this.rayTrace(worldIn, playerIn, stack.getItemDamage() == 0);
 
             if (rtr != null && rtr.typeOfHit == RayTraceResult.Type.BLOCK)
             {
@@ -169,16 +170,16 @@ public class ItemClayBucket extends Item
                     pos = pos.offset(rtr.sideHit);
                     if (block.isReplaceable(worldIn, pos))
                     {
-                        if (block == Blocks.water)
+                        if (block == Blocks.WATER)
                         {
-                            block = Blocks.flowing_water;
+                            block = Blocks.FLOWING_WATER;
                         }
-                        else if (block == Blocks.lava)
+                        else if (block == Blocks.LAVA)
                         {
-                            block = Blocks.flowing_lava;
+                            block = Blocks.FLOWING_LAVA;
                         }
 
-                        if (worldIn.getBiomeGenForCoords(pos).equals(Biomes.hell))
+                        if (worldIn.getBiomeGenForCoords(pos).equals(Biomes.HELL))
                         {
                             int no = playerIn.getRNG().nextInt(NETHER_LINES);
                             playerIn.addChatComponentMessage(new TextComponentTranslation("chat.claybucketnether." + no));
@@ -201,6 +202,6 @@ public class ItemClayBucket extends Item
                 return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
             }
         }
-        return ActionResult.newResult(EnumActionResult.PASS, stack);
+        return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
     }
 }

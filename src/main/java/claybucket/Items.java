@@ -13,7 +13,7 @@ public class Items
     public static final String CLAYBUCKET = "claybucket";
 
     public static final String[] NAMES = {"water", "lava"};
-    public static final Block[] BLOCKS = {Blocks.water, Blocks.lava};
+    public static final Block[] BLOCKS = {Blocks.WATER, Blocks.LAVA};
     public static final Fluid[] FLUIDS = {FluidRegistry.WATER, FluidRegistry.LAVA};
     public static final boolean[] DESTROY_BUCKET = {false, true};
 
@@ -23,9 +23,9 @@ public class Items
     public static void registerAll()
     {
         unfiredClaybucket = new ItemUnfiredClaybucket();
-        GameRegistry.registerItem(unfiredClaybucket, UNFIRED_CLAYBUCKET);
+        GameRegistry.register(unfiredClaybucket);
 
         claybucket = new ItemClayBucket();
-        GameRegistry.registerItem(claybucket, CLAYBUCKET);
+        GameRegistry.register(claybucket);
     }
 }
