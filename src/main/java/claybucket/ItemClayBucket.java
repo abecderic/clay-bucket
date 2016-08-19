@@ -17,13 +17,15 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidContainerItem;
 import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.List;
 
-public class ItemClayBucket extends Item
+public class ItemClayBucket extends Item implements IFluidContainerItem
 {
     private static final int AMOUNT = 1000;
     private static final int NETHER_LINES = 6;
@@ -203,5 +205,60 @@ public class ItemClayBucket extends Item
             }
         }
         return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
+    }
+
+    @Override
+    public FluidStack getFluid(ItemStack container)
+    {
+        if (container == null) return null;
+        if (container.getItemDamage() == 0) return null;
+        if (container.getItemDamage() > Items.FLUIDS.length + 1) return null;
+        return new FluidStack(Items.FLUIDS[container.getItemDamage() - 1], AMOUNT);
+    }
+
+    @Override
+    public int getCapacity(ItemStack container)
+    {
+        return AMOUNT;
+    }
+
+    @Override
+    public int fill(ItemStack container, FluidStack resource, boolean doFill)
+    {
+        if (container.getItemDamage() != 0) return 0;
+        if (resource.amount != AMOUNT) return 0;
+        for (int i = 0; i < Items.FLUIDS.length; i++)
+        {
+            Fluid fluid = Items.FLUIDS[i];
+            if (resource.getFluid().equals(fluid))
+            {
+                if (doFill)
+                {
+                    container.setItemDamage(i + 1);
+                }
+                return AMOUNT;
+            }
+        }
+        return 0;
+    }
+
+    @Override
+    public FluidStack drain(ItemStack container, int maxDrain, boolean doDrain)
+    {
+        if (container.getItemDamage() <= 0) return null;
+        if (maxDrain < 1000) return null;
+        int dmg = container.getItemDamage();
+        if (doDrain)
+        {
+            if (Items.DESTROY_BUCKET[dmg - 1])
+            {
+                container.stackSize = 0;
+            }
+            else
+            {
+                container.setItemDamage(0);
+            }
+        }
+        return new FluidStack(Items.FLUIDS[dmg - 1], AMOUNT);
     }
 }
