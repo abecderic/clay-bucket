@@ -1,6 +1,6 @@
 {
 	"parent": "item/generated",
 	"textures": { 
-		"layer0": "claybucket:items/unfiredClaybucket"
+		"layer0": "claybucket:items/unfiredclaybucket"
 	}
 }
