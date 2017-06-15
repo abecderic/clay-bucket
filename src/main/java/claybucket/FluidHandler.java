@@ -114,7 +114,7 @@ public class FluidHandler implements IFluidHandlerItem, ICapabilityProvider
     @Override
     public FluidStack drain(FluidStack resource, boolean doDrain)
     {
-        if (container.func_190916_E() != 1 || resource == null || resource.amount <= 0 || !resource.isFluidEqual(getFluid()))
+        if (container.getCount() != 1 || resource == null || resource.amount <= 0 || !resource.isFluidEqual(getFluid()))
         {
             return null;
         }
@@ -131,7 +131,7 @@ public class FluidHandler implements IFluidHandlerItem, ICapabilityProvider
         {
             if (Items.DESTROY_BUCKET[dmg - 1])
             {
-                container.func_190918_g(container.func_190916_E()); /* set stackSize to 0 */
+                container.setCount(0);
             }
             else
             {

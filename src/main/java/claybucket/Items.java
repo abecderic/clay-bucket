@@ -9,7 +9,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class Items
 {
-    public static final String UNFIRED_CLAYBUCKET = "unfiredClaybucket";
+    public static final String UNFIRED_CLAYBUCKET = "unfired_claybucket";
     public static final String CLAYBUCKET = "claybucket";
 
     public static final String[] NAMES = {"water", "lava"};

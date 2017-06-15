@@ -13,7 +13,8 @@ public class CommonProxy
 
     public void registerRecipes()
     {
-        GameRegistry.addRecipe(new ItemStack(Items.unfiredClaybucket), "c c", " c ", 'c', net.minecraft.init.Items.CLAY_BALL);
+        // TODO
+        //GameRegistry.addRecipe(new ItemStack(Items.unfiredClaybucket), "c c", " c ", 'c', net.minecraft.init.Items.CLAY_BALL);
         GameRegistry.addSmelting(Items.unfiredClaybucket, new ItemStack(Items.claybucket), 0.2f);
     }
 

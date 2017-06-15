@@ -5,7 +5,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -63,11 +62,14 @@ public class ItemClayBucket extends ItemFluidContainer
     }
 
     @Override
-    public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems)
+    public void getSubItems(CreativeTabs creativeTab, NonNullList<ItemStack> list)
     {
-        for (int i = 0; i <= Items.NAMES.length; i++)
+        if (creativeTab == CreativeTabs.MISC || creativeTab == CreativeTabs.SEARCH)
         {
-            subItems.add(new ItemStack(Items.claybucket, 1, i));
+            for (int i = 0; i <= Items.NAMES.length; i++)
+            {
+                list.add(new ItemStack(Items.claybucket, 1, i));
+            }
         }
     }
 
@@ -122,7 +124,7 @@ public class ItemClayBucket extends ItemFluidContainer
                     ItemStack item = event.getEntityPlayer().getHeldItem(hand);
                     if (Items.DESTROY_BUCKET[item.getItemDamage() - 1])
                     {
-                        item.func_190918_g(item.func_190916_E()); /* set stackSize to 0 */
+                        item.setCount(0);
                     }
                     else
                     {
@@ -188,7 +190,7 @@ public class ItemClayBucket extends ItemFluidContainer
                         if (worldIn.getBiome(pos).equals(Biomes.HELL) && block == Blocks.FLOWING_WATER)
                         {
                             int no = playerIn.getRNG().nextInt(NETHER_LINES);
-                            playerIn.addChatComponentMessage(new TextComponentTranslation("chat.claybucketnether." + no), false); /* false = regular chat */
+                            playerIn.sendStatusMessage(new TextComponentTranslation("chat.claybucketnether." + no), true);
                         }
                         else
                         {
@@ -196,7 +198,7 @@ public class ItemClayBucket extends ItemFluidContainer
 
                             if (Items.DESTROY_BUCKET[stack.getItemDamage() - 1])
                             {
-                                stack.func_190918_g(stack.func_190916_E()); /* set stackSize to 0 */
+                                stack.setCount(0);
                             }
                             else
                             {
