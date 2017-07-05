@@ -27,12 +27,12 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class ItemClayBucket extends ItemFluidContainer
+public class ItemClaybucket extends ItemFluidContainer
 {
     private static final int AMOUNT = 1000;
     private static final int NETHER_LINES = 6;
 
-    public ItemClayBucket()
+    public ItemClaybucket()
     {
         super(AMOUNT);
         this.setCreativeTab(CreativeTabs.MISC);
@@ -62,13 +62,13 @@ public class ItemClayBucket extends ItemFluidContainer
     }
 
     @Override
-    public void getSubItems(CreativeTabs creativeTab, NonNullList<ItemStack> list)
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems)
     {
-        if (creativeTab == CreativeTabs.MISC || creativeTab == CreativeTabs.SEARCH)
+        if (tab.equals(CreativeTabs.MISC) || tab.equals(CreativeTabs.SEARCH))
         {
             for (int i = 0; i <= Items.NAMES.length; i++)
             {
-                list.add(new ItemStack(Items.claybucket, 1, i));
+                subItems.add(new ItemStack(Items.claybucket, 1, i));
             }
         }
     }
@@ -79,11 +79,11 @@ public class ItemClayBucket extends ItemFluidContainer
         if (event.getWorld().isRemote) return;
 
         EnumHand hand = null;
-        if (event.getEntityPlayer().getHeldItem(EnumHand.MAIN_HAND) != null && event.getEntityPlayer().getHeldItem(EnumHand.MAIN_HAND).getItem() == Items.claybucket)
+        if (!event.getEntityPlayer().getHeldItem(EnumHand.MAIN_HAND).isEmpty() && event.getEntityPlayer().getHeldItem(EnumHand.MAIN_HAND).getItem() == Items.claybucket)
         {
             hand = EnumHand.MAIN_HAND;
         }
-        else if (event.getEntityPlayer().getHeldItem(EnumHand.OFF_HAND) != null && event.getEntityPlayer().getHeldItem(EnumHand.OFF_HAND).getItem() == Items.claybucket)
+        else if (!event.getEntityPlayer().getHeldItem(EnumHand.OFF_HAND).isEmpty() && event.getEntityPlayer().getHeldItem(EnumHand.OFF_HAND).getItem() == Items.claybucket)
         {
             hand = EnumHand.OFF_HAND;
         }
@@ -145,7 +145,7 @@ public class ItemClayBucket extends ItemFluidContainer
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand)
     {
         ItemStack stack = playerIn.getHeldItem(hand);
-        if (!worldIn.isRemote && stack != null)
+        if (!worldIn.isRemote && !stack.isEmpty())
         {
             RayTraceResult rtr = this.rayTrace(worldIn, playerIn, stack.getItemDamage() == 0);
 
