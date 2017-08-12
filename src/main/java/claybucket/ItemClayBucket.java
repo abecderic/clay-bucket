@@ -7,6 +7,7 @@ import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -16,22 +17,25 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidContainerItem;
-import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.ItemFluidContainer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemClayBucket extends Item implements IFluidContainerItem
+public class ItemClayBucket extends ItemFluidContainer
 {
     private static final int AMOUNT = 1000;
     private static final int NETHER_LINES = 6;
 
     public ItemClayBucket()
     {
+        super(AMOUNT);
         this.setCreativeTab(CreativeTabs.MISC);
         this.setHasSubtypes(true);
         this.setMaxStackSize(1);
@@ -89,7 +93,7 @@ public class ItemClayBucket extends Item implements IFluidContainerItem
             if (event.getEntityPlayer().getHeldItem(hand).getItemDamage() == 0) /* Empty */
             {
                 IFluidHandler tank = (IFluidHandler) te;
-                FluidStack stack = tank.drain(event.getFace(), AMOUNT, false);
+                FluidStack stack = tank.drain(AMOUNT, false);
                 if (stack != null && stack.amount == AMOUNT)
                 {
                     for (int i = 0; i < Items.FLUIDS.length; i++)
@@ -98,7 +102,7 @@ public class ItemClayBucket extends Item implements IFluidContainerItem
                         {
                             ItemStack item = event.getEntityPlayer().getHeldItem(hand);
                             item.setItemDamage(i + 1);
-                            tank.drain(event.getFace(), AMOUNT, true);
+                            tank.drain(AMOUNT, true);
                             event.getEntityPlayer().setHeldItem(hand, item);
                             if (event.isCancelable())
                             {
@@ -113,7 +117,7 @@ public class ItemClayBucket extends Item implements IFluidContainerItem
             {
                 IFluidHandler tank = (IFluidHandler) te;
                 FluidStack fluid = new FluidStack(Items.FLUIDS[event.getEntityPlayer().getHeldItem(hand).getItemDamage() - 1], AMOUNT);
-                if (tank.fill(event.getFace(), fluid, false) == AMOUNT)
+                if (tank.fill(fluid, false) == AMOUNT)
                 {
                     ItemStack item = event.getEntityPlayer().getHeldItem(hand);
                     if (Items.DESTROY_BUCKET[item.getItemDamage() - 1])
@@ -124,7 +128,7 @@ public class ItemClayBucket extends Item implements IFluidContainerItem
                     {
                         item.setItemDamage(0);
                     }
-                    tank.fill(event.getFace(), fluid, true);
+                    tank.fill(fluid, true);
                     event.getEntityPlayer().setHeldItem(hand, item);
                     if (event.isCancelable())
                     {
@@ -181,7 +185,7 @@ public class ItemClayBucket extends Item implements IFluidContainerItem
                             block = Blocks.FLOWING_LAVA;
                         }
 
-                        if (worldIn.getBiomeGenForCoords(pos).equals(Biomes.HELL))
+                        if (worldIn.getBiomeGenForCoords(pos).equals(Biomes.HELL) && block == Blocks.FLOWING_WATER)
                         {
                             int no = playerIn.getRNG().nextInt(NETHER_LINES);
                             playerIn.addChatComponentMessage(new TextComponentTranslation("chat.claybucketnether." + no));
@@ -208,57 +212,8 @@ public class ItemClayBucket extends Item implements IFluidContainerItem
     }
 
     @Override
-    public FluidStack getFluid(ItemStack container)
+    public ICapabilityProvider initCapabilities(@Nonnull ItemStack stack, @Nullable NBTTagCompound nbt)
     {
-        if (container == null) return null;
-        if (container.getItemDamage() == 0) return null;
-        if (container.getItemDamage() > Items.FLUIDS.length + 1) return null;
-        return new FluidStack(Items.FLUIDS[container.getItemDamage() - 1], AMOUNT);
-    }
-
-    @Override
-    public int getCapacity(ItemStack container)
-    {
-        return AMOUNT;
-    }
-
-    @Override
-    public int fill(ItemStack container, FluidStack resource, boolean doFill)
-    {
-        if (container.getItemDamage() != 0) return 0;
-        if (resource.amount != AMOUNT) return 0;
-        for (int i = 0; i < Items.FLUIDS.length; i++)
-        {
-            Fluid fluid = Items.FLUIDS[i];
-            if (resource.getFluid().equals(fluid))
-            {
-                if (doFill)
-                {
-                    container.setItemDamage(i + 1);
-                }
-                return AMOUNT;
-            }
-        }
-        return 0;
-    }
-
-    @Override
-    public FluidStack drain(ItemStack container, int maxDrain, boolean doDrain)
-    {
-        if (container.getItemDamage() <= 0) return null;
-        if (maxDrain < 1000) return null;
-        int dmg = container.getItemDamage();
-        if (doDrain)
-        {
-            if (Items.DESTROY_BUCKET[dmg - 1])
-            {
-                container.stackSize = 0;
-            }
-            else
-            {
-                container.setItemDamage(0);
-            }
-        }
-        return new FluidStack(Items.FLUIDS[dmg - 1], AMOUNT);
+        return new FluidHandler(stack, AMOUNT);
     }
 }
