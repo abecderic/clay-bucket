@@ -95,7 +95,7 @@ public class FluidHandler implements IFluidHandlerItem, ICapabilityProvider
     public int fill(FluidStack resource, boolean doFill)
     {
         if (container.getItemDamage() != 0) return 0;
-        if (resource.amount != capacity) return 0;
+        if (resource.amount < capacity) return 0;
         for (int i = 0; i < Items.FLUIDS.length; i++)
         {
             Fluid fluid = Items.FLUIDS[i];
