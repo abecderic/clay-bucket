@@ -1,0 +1,11 @@
+item.claybucket:unfiredclaybucket.name=Ungebrannter Toneimer
+item.claybucket:claybucket.name=Toneimer
+item.claybucket:claybucket_water.name=Wasser-Toneimer
+item.claybucket:claybucket_lava.name=Lava-Toneimer
+
+chat.claybucketnether.0=Nein, es ist zu heiß hier.
+chat.claybucketnether.1=Hey, das kannst du nicht tun!
+chat.claybucketnether.2=Ich möchte die Pigmen nicht verärgern.
+chat.claybucketnether.3=Nein, das Wasser würde einfach verdunsten.
+chat.claybucketnether.4=Puh, hier ist fast Wasser verschüttet worden.
+chat.claybucketnether.5=Das funktioniert nicht mit einem Eiseneimer, warum sollte es mit einem Toneimer funktionieren?
