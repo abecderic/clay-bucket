@@ -1,0 +1,11 @@
+item.claybucket:unfiredclaybucket.name=Niewypalone gliniane wiadro
+item.claybucket:claybucket.name=Gliniane wiadro
+item.claybucket:claybucket_water.name=Gliniane wiadro wody
+item.claybucket:claybucket_lava.name=Gliniane wiadro lawy
+
+chat.claybucketnether.0=Nie, tutaj jest za gorąco.
+chat.claybucketnether.1=Hej, nie możesz tego zrobić!
+chat.claybucketnether.2=Nie chcę rozwścieczyć świń zombie.
+chat.claybucketnether.3=Nie, woda po prostu wyparuje.
+chat.claybucketnether.4=Łoo, prawie się rozlała.
+chat.claybucketnether.5=Nie da się tego zrobić z żelaznym wiadrem, dlaczego miało by się dać z glinianym?
